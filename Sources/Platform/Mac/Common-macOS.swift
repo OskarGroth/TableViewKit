@@ -10,15 +10,22 @@
     import Cocoa
     
     public typealias CollectionView = NSCollectionView
-    public typealias TableView = NSTableView
+    public typealias TableView = MacTableView
     public typealias TableViewCell = MacTableViewCell
     public typealias TableViewRowAction = NSTableViewRowAction
     public typealias TableViewRowAnimation = NSTableView.AnimationOptions
     public typealias EdgeInsets = MacEdgeInsets
     public typealias Nib = NSNib
+    public typealias View = NSView
     public typealias TextField = NSTextField
     public typealias TableViewHeaderFooterView = MacHeaderFooterView
     public typealias CollectionViewScrollPosition = MacCollectionViewScrollPosition
+    public typealias TableViewScrollPosition = MacTableViewScrollPosition
+    public typealias TableViewDelegate = NSTableViewDelegate
+    public typealias TableViewDataSource = NSTableViewDataSource
+
+    public var TableViewAutomaticDimension: CGFloat { return 42.0 }
+
     public extension NSTableView.AnimationOptions {
         
         public static var automatic: NSTableView.AnimationOptions {
@@ -27,6 +34,10 @@
         
         public static var fade: NSTableView.AnimationOptions {
             return .effectFade
+        }
+        
+        public static var none: NSTableView.AnimationOptions {
+            return .fade // TODO
         }
         
     }
@@ -62,6 +73,10 @@
             self.init(item: row, section: section)
         }
         
+        public var row: Int {
+            return item
+        }
+        
     }
     
     public extension NSTextField {
@@ -95,6 +110,20 @@
 
     }
     
+    public struct MacTableViewScrollPosition: OptionSet {
+        
+        public let rawValue: UInt
+        
+        public init(rawValue: UInt) {
+            self.rawValue = rawValue
+        }
+        
+        static let none = MacTableViewScrollPosition(rawValue: 1 << 0)
+        static let top = MacTableViewScrollPosition(rawValue: 1 << 1)
+        static let middle = MacTableViewScrollPosition(rawValue: 1 << 2)
+        static let bottom = MacTableViewScrollPosition(rawValue: 1 << 3)
+    }
+    
     public extension NSCollectionView {
         
         public var indexPathsForVisibleItems: Set<IndexPath> {
@@ -119,10 +148,32 @@
         
     }
     
+    public class MacTableView: NSTableView {
+        
+        public var sectionHeaderHeight: CGFloat = 22.0
+        
+        public var sectionFooterHeight: CGFloat = 22.0
+        
+        public var numberOfSections: Int = 0
+        
+    }
+    
     public extension NSTableView {
+        
+        public var isEditing: Bool {
+            return false // TODO
+        }
+        
+        public var allowsMultipleSelectionDuringEditing: Bool {
+            return false 
+        }
         
         public var indexPathsForVisibleRows: [IndexPath]? {
             return nil
+        }
+        
+        public var visibleCells: [TableViewCell] {
+            return []
         }
         
         public func register(_ cellClass: Any?, forCellReuseIdentifier identifier: String) {
@@ -135,6 +186,10 @@
         
         public func cellForRow(at indexPath: IndexPath) -> TableViewCell? {
             return view(atColumn: indexPath.section, row: indexPath.item, makeIfNecessary: true) as? TableViewCell
+        }
+        
+        public func scrollToRow(at indexPath: IndexPath, at scrollPosition: TableViewScrollPosition, animated: Bool) {
+            
         }
         
         public func performBatchUpdates(_ updates: (() -> Void)?, completion: ((Bool) -> Void)? = nil) {
@@ -168,6 +223,16 @@
         
         public func deleteSections(_ sections: IndexSet, with animation: TableViewRowAnimation) {
             
+        }
+        
+        public func dequeueReusableCell(withIdentifier identifier: String, for indexPath: IndexPath) -> TableViewCell {
+            // TODO
+            return TableViewCell()
+        }
+        
+        public func dequeueReusableHeaderFooterView(withIdentifier identifier: String) -> TableViewHeaderFooterView? {
+            // TODO
+            return nil
         }
 
     }

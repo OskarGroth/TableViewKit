@@ -22,7 +22,7 @@ struct Quote {
 
 class DemoTableViewController: UITableViewController {
     
-    lazy var dataSource: TableViewDataSource = TableViewDataSource()
+    lazy var dataSource: TableViewKitDataSource = TableViewKitDataSource()
     
     var quotes: [Quote] = [
         Quote(text: "I'll be back", author: Person(name: "Arnold Swarzenegger")),

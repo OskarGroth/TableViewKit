@@ -15,11 +15,11 @@
 /// A generic, heterogenous table view data source and delegate.
 ///
 /// After initialization, run the `setup` function with a table view to configure it to use this as its data source and delegate.
-public class TableViewDataSource: NSObject {
+public class TableViewKitDataSource: NSObject {
 
     /// The current table view sections
     public fileprivate(set) var sections: [TableViewSection]
-    fileprivate weak var tableView: UITableView?
+    fileprivate weak var tableView: TableView?
     fileprivate let processingQueue = OperationQueue()
 
     /// The designated initializer
@@ -29,7 +29,7 @@ public class TableViewDataSource: NSObject {
         self.sections = sections
         processingQueue.maxConcurrentOperationCount = 1
         super.init()
-        NotificationCenter.default.addObserver(self, selector: #selector(recievedCellNeedsSizeUpdateNotification), name: TVKCellNeedsSizeUpdateNotificationName, object: nil)
+      //  NotificationCenter.default.addObserver(self, selector: #selector(recievedCellNeedsSizeUpdateNotification), name: TVKCellNeedsSizeUpdateNotificationName, object: nil) TODO
     }
     
     /// Sets new sections on the data source and reloads the table view if this is its data source.
@@ -67,7 +67,7 @@ public class TableViewDataSource: NSObject {
     ///     - newSections: The new sections to set.
     ///     - animation: When set to anything other than `.none`, computes and animates the changes from the current sections. Defaults to `.automatic`
     ///     - completion: Run when the new sections have been applied.
-    public func updateSections(to newSections: [TableViewSection], animation: UITableViewRowAnimation = .automatic , completion: @escaping (() -> Void) = {} ) {
+    public func updateSections(to newSections: [TableViewSection], animation: TableViewRowAnimation = .automatic , completion: @escaping (() -> Void) = {} ) {
 
         guard animation != .none else {
             reloadData(newSections: newSections)
@@ -107,22 +107,22 @@ public class TableViewDataSource: NSObject {
     }
 
     /// Setups the provided table view for use with this datasource
-    public func setup(with tableView: UITableView) {
+    public func setup(with tableView: TableView) {
         self.tableView = tableView
 
-        tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.sectionHeaderHeight = UITableViewAutomaticDimension
-        tableView.sectionFooterHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = TableViewAutomaticDimension
+        tableView.sectionHeaderHeight = TableViewAutomaticDimension
+        tableView.sectionFooterHeight = TableViewAutomaticDimension
         
         ignoreDidEndDisplayingCells = true
         tableView.dataSource = self
         tableView.delegate = self
         tableView.reloadData()
-        UIView.performWithoutAnimation {
+        //View.performWithoutAnimation { TODO
             if tableView.numberOfSections > 0 {
                 tableView.scrollToRow(at: IndexPath(row: NSNotFound, section: 0), at: .top, animated: false)
             }
-        }
+     //   }
         ignoreDidEndDisplayingCells = false
     }
     
@@ -141,7 +141,7 @@ public class TableViewDataSource: NSObject {
     }
 
     fileprivate var isCurrentDataSource: Bool {
-        if let dataSource = tableView?.dataSource as? TableViewDataSource, dataSource == self {
+        if let dataSource = tableView?.dataSource as? TableViewKitDataSource, dataSource == self {
             return true
         }
         return false
@@ -150,7 +150,7 @@ public class TableViewDataSource: NSObject {
     fileprivate var ignoreDidEndDisplayingCells = false
     
     func recievedCellNeedsSizeUpdateNotification(notification: Notification) {
-        guard let cell = notification.object as? UITableViewCell else { return }
+        guard let cell = notification.object as? TableViewCell else { return }
         guard let tableView = tableView, tableView.visibleCells.contains(cell) else { return }
         DispatchQueue.main.async { // Without the dispatch the animations looka weird.
             tableView.beginUpdates()
@@ -160,20 +160,21 @@ public class TableViewDataSource: NSObject {
 
 }
 
-extension TableViewDataSource: UITableViewDataSource {
+
+extension TableViewKitDataSource: TableViewDataSource {
 
     /// :nodoc:
-    public func numberOfSections(in tableView: UITableView) -> Int {
+    public func numberOfSections(in tableView: TableView) -> Int {
         return sections.count
     }
 
     /// :nodoc:
-    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    public func tableView(_ tableView: TableView, numberOfRowsInSection section: Int) -> Int {
         return sections[section].items.count
     }
 
     /// :nodoc:
-    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    public func tableView(_ tableView: TableView, cellForRowAt indexPath: IndexPath) -> TableViewCell {
         let cellModel = sections[indexPath]
         cellModel.cellReuseRegistrator?(tableView)
         let cell = tableView.dequeueReusableCell(withIdentifier: cellModel.cellReuseIdentifier, for: indexPath)
@@ -182,7 +183,7 @@ extension TableViewDataSource: UITableViewDataSource {
     }
     
     /// :nodoc:
-    public func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    public func tableView(_ tableView: TableView, canEditRowAt indexPath: IndexPath) -> Bool {
         let cellModel = sections[indexPath]
         if tableView.isMultiSelecting {
             return cellModel.isMultiSelectable
@@ -193,15 +194,15 @@ extension TableViewDataSource: UITableViewDataSource {
 
 }
 
-extension TableViewDataSource: UITableViewDelegate {
+extension TableViewKitDataSource: TableViewDelegate {
 
     /// :nodoc:
-    public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    public func tableView(_ tableView: TableView, willDisplay cell: TableViewCell, forRowAt indexPath: IndexPath) {
         sections[indexPath.section].items[indexPath.row].willDisplayHandler?(tableView, cell, indexPath)
     }
     
     /// :nodoc:
-    public func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    public func tableView(_ tableView: TableView, didEndDisplaying cell: TableViewCell, forRowAt indexPath: IndexPath) {
         guard !ignoreDidEndDisplayingCells else { return }
         // If we're in the middle of a data source switch or section update, we'll get callbacks that those old cells did end displaying and those won't correspond to the models we have currently.
         
@@ -212,38 +213,38 @@ extension TableViewDataSource: UITableViewDelegate {
     }
     
     /// :nodoc:
-    public func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+    public func tableView(_ tableView: TableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return sections[indexPath.section].items[indexPath.row].estimatedHeight(forWidth: tableView.bounds.width)
     }
 
     /// :nodoc:
-    public func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+    public func tableView(_ tableView: TableView, viewForFooterInSection section: Int) -> View? {
         return sections[section].footer.flatMap(tableView.headerFooterView)
     }
 
     /// :nodoc:
-    public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    public func tableView(_ tableView: TableView, viewForHeaderInSection section: Int) -> View? {
         return sections[section].header.flatMap(tableView.headerFooterView)
     }
 
     /// :nodoc:
-    public func tableView(_ tableView: UITableView, estimatedHeightForFooterInSection section: Int) -> CGFloat {
+    public func tableView(_ tableView: TableView, estimatedHeightForFooterInSection section: Int) -> CGFloat {
         return sections[section].footer?.estimatedHeight(forWidth: tableView.bounds.width) ?? 0
     }
 
     /// :nodoc:
-    public func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+    public func tableView(_ tableView: TableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
         return sections[section].header?.estimatedHeight(forWidth: tableView.bounds.width) ?? 0
     }
 
     /// :nodoc:
-    public func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+    public func tableView(_ tableView: TableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
         let cellModel = sections[indexPath]
         return tableView.isMultiSelecting ? cellModel.isMultiSelectable : cellModel.isSelectable
     }
     
     /// :nodoc:
-    public func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+    public func tableView(_ tableView: TableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         let cellModel = sections[indexPath]
         if tableView.isMultiSelecting {
             return cellModel.isMultiSelectable ? indexPath : nil
@@ -253,12 +254,12 @@ extension TableViewDataSource: UITableViewDelegate {
     }
     
     /// :nodoc:
-    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    public func tableView(_ tableView: TableView, didSelectRowAt indexPath: IndexPath) {
         sections[indexPath].selectionHandler?(tableView, indexPath)
     }
     
     /// :nodoc:
-    public func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+    public func tableView(_ tableView: TableView, didDeselectRowAt indexPath: IndexPath) {
         guard !ignoreDidEndDisplayingCells else { return }
         // If we're in the middle of a data source switch or section update, we'll get callbacks that those old cells did end displaying and those won't correspond to the models we have currently.
         
@@ -269,35 +270,36 @@ extension TableViewDataSource: UITableViewDelegate {
     }
     
     /// :nodoc:
-    public func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+    public func tableView(_ tableView: TableView, editActionsForRowAt indexPath: IndexPath) -> [TableViewRowAction]? {
         return sections[indexPath.section].items[indexPath.row].editActions
     }
 
     /// :nodoc:
-    public func tableView(_ tableView: UITableView, shouldShowMenuForRowAt indexPath: IndexPath) -> Bool {
+    public func tableView(_ tableView: TableView, shouldShowMenuForRowAt indexPath: IndexPath) -> Bool {
         return (sections[indexPath].copyAction != nil || sections[indexPath].pasteAction != nil)
     }
     
     /// :nodoc:
-    public func tableView(_ tableView: UITableView, canPerformAction action: Selector, forRowAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-        if action == #selector(UIResponderStandardEditActions.copy(_:)) {
+    public func tableView(_ tableView: TableView, canPerformAction action: Selector, forRowAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
+        /*if action == #selector(UIResponderStandardEditActions.copy(_:)) {
             return sections[indexPath].copyAction != nil
         } else if action == #selector(UIResponderStandardEditActions.paste(_:)) {
             return sections[indexPath].pasteAction != nil
         } else {
             return false
-        }
+        }*/
+        return false // TODO
     }
     
     /// :nodoc:
-    public func tableView(_ tableView: UITableView, performAction action: Selector, forRowAt indexPath: IndexPath, withSender sender: Any?) {
+    public func tableView(_ tableView: TableView, performAction action: Selector, forRowAt indexPath: IndexPath, withSender sender: Any?) {
         guard let cell = tableView.cellForRow(at: indexPath) else { return }
-
+/*
         if action == #selector(UIResponderStandardEditActions.copy(_:)) {
             sections[indexPath].copyAction?(tableView, cell, indexPath)
         } else if action == #selector(UIResponderStandardEditActions.paste(_:)) {
             sections[indexPath].pasteAction?(tableView, cell, indexPath)
-        }
+        }*/ // TODO
     }
     
 }
@@ -305,19 +307,19 @@ extension TableViewDataSource: UITableViewDelegate {
 internal extension Collection {
     
     /// Returns the element at the specified index if it is within bounds, otherwise nil.
-    subscript (safe index: Index) -> Generator.Element? {
+    subscript (safe index: Index) -> Iterator.Element? {
         return indices.contains(index) ? self[index] : nil
     }
 
 }
 
-private extension UITableView {
+private extension TableView {
     
     var isMultiSelecting: Bool {
         return (isEditing && allowsMultipleSelectionDuringEditing) || (!isEditing && allowsMultipleSelection)
     }
     
-    func headerFooterView(for viewModel: TableViewHeaderFooterViewModel) -> UIView? {
+    func headerFooterView(for viewModel: TableViewHeaderFooterViewModel) -> View? {
         viewModel.viewReuseRegistrator?(self)
         let view = dequeueReusableHeaderFooterView(withIdentifier: viewModel.viewReuseIdentifier)!
         return viewModel.configurator?(view) ?? view

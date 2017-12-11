@@ -26,6 +26,7 @@
 		759B8C011FDF33A6003D7E14 /* SectionedArrayCompare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 934896F81FDDCEF00019E9EA /* SectionedArrayCompare.swift */; };
 		759B8C021FDF33AE003D7E14 /* SectionedChanges.swift in Sources */ = {isa = PBXBuildFile; fileRef = 934896F21FDDCEEF0019E9EA /* SectionedChanges.swift */; };
 		759B8C031FDF33C0003D7E14 /* ApplyChanges.swift in Sources */ = {isa = PBXBuildFile; fileRef = 934896F61FDDCEF00019E9EA /* ApplyChanges.swift */; };
+		759B8C041FDF40F3003D7E14 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932842841FDC838200B6CC91 /* TableViewDataSource.swift */; };
 		9328428B1FDC838200B6CC91 /* TableViewCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932842801FDC838200B6CC91 /* TableViewCellModel.swift */; };
 		9328428C1FDC838200B6CC91 /* HeaderFooterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932842811FDC838200B6CC91 /* HeaderFooterViewModel.swift */; };
 		9328428D1FDC838200B6CC91 /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932842821FDC838200B6CC91 /* Reusable.swift */; };
@@ -488,6 +489,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				759B8C041FDF40F3003D7E14 /* TableViewDataSource.swift in Sources */,
 				759B8BF61FDF2CCA003D7E14 /* TableViewCellModel.swift in Sources */,
 				759B8BEE1FDF241A003D7E14 /* Reusable.swift in Sources */,
 				759B8C011FDF33A6003D7E14 /* SectionedArrayCompare.swift in Sources */,
