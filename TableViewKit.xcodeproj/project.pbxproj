@@ -17,6 +17,15 @@
 		759B8BF31FDF28D9003D7E14 /* Common-iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 759B8BF21FDF28D9003D7E14 /* Common-iOS.swift */; };
 		759B8BF41FDF2973003D7E14 /* Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 934896F31FDDCEF00019E9EA /* Identifiable.swift */; };
 		759B8BF51FDF29EF003D7E14 /* StandardHeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932842891FDC838200B6CC91 /* StandardHeaderFooterView.swift */; };
+		759B8BF61FDF2CCA003D7E14 /* TableViewCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932842801FDC838200B6CC91 /* TableViewCellModel.swift */; };
+		759B8BF71FDF2EA7003D7E14 /* TableViewCellModel+SeparatorStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932842831FDC838200B6CC91 /* TableViewCellModel+SeparatorStyle.swift */; };
+		759B8BFC1FDF336D003D7E14 /* TableViewSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932842871FDC838200B6CC91 /* TableViewSection.swift */; };
+		759B8BFE1FDF3387003D7E14 /* ArrayChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 934896F41FDDCEF00019E9EA /* ArrayChange.swift */; };
+		759B8BFF1FDF3395003D7E14 /* ArraySetOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 934896F71FDDCEF00019E9EA /* ArraySetOperations.swift */; };
+		759B8C001FDF339C003D7E14 /* CompareArrays.swift in Sources */ = {isa = PBXBuildFile; fileRef = 934896F51FDDCEF00019E9EA /* CompareArrays.swift */; };
+		759B8C011FDF33A6003D7E14 /* SectionedArrayCompare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 934896F81FDDCEF00019E9EA /* SectionedArrayCompare.swift */; };
+		759B8C021FDF33AE003D7E14 /* SectionedChanges.swift in Sources */ = {isa = PBXBuildFile; fileRef = 934896F21FDDCEEF0019E9EA /* SectionedChanges.swift */; };
+		759B8C031FDF33C0003D7E14 /* ApplyChanges.swift in Sources */ = {isa = PBXBuildFile; fileRef = 934896F61FDDCEF00019E9EA /* ApplyChanges.swift */; };
 		9328428B1FDC838200B6CC91 /* TableViewCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932842801FDC838200B6CC91 /* TableViewCellModel.swift */; };
 		9328428C1FDC838200B6CC91 /* HeaderFooterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932842811FDC838200B6CC91 /* HeaderFooterViewModel.swift */; };
 		9328428D1FDC838200B6CC91 /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932842821FDC838200B6CC91 /* Reusable.swift */; };
@@ -479,14 +488,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				759B8BF61FDF2CCA003D7E14 /* TableViewCellModel.swift in Sources */,
 				759B8BEE1FDF241A003D7E14 /* Reusable.swift in Sources */,
+				759B8C011FDF33A6003D7E14 /* SectionedArrayCompare.swift in Sources */,
 				759B8BEF1FDF2857003D7E14 /* HeaderFooterViewModel.swift in Sources */,
+				759B8C031FDF33C0003D7E14 /* ApplyChanges.swift in Sources */,
 				759B8BE71FDF215B003D7E14 /* NibLoadable.swift in Sources */,
 				759B8BED1FDF23CF003D7E14 /* AnyEquatable.swift in Sources */,
+				759B8BFF1FDF3395003D7E14 /* ArraySetOperations.swift in Sources */,
+				759B8BF71FDF2EA7003D7E14 /* TableViewCellModel+SeparatorStyle.swift in Sources */,
+				759B8C021FDF33AE003D7E14 /* SectionedChanges.swift in Sources */,
 				759B8BF41FDF2973003D7E14 /* Identifiable.swift in Sources */,
+				759B8BFE1FDF3387003D7E14 /* ArrayChange.swift in Sources */,
+				759B8C001FDF339C003D7E14 /* CompareArrays.swift in Sources */,
 				759B8BF51FDF29EF003D7E14 /* StandardHeaderFooterView.swift in Sources */,
 				759B8BF11FDF2891003D7E14 /* Common-macOS.swift in Sources */,
 				759B8BEB1FDF21F8003D7E14 /* NSView+LoadFromNib.swift in Sources */,
+				759B8BFC1FDF336D003D7E14 /* TableViewSection.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

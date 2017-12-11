@@ -5,16 +5,20 @@
 //  Licensed under the MIT license, see LICENSE file.
 //
 
-import UIKit
+#if os(OSX)
+    import Cocoa
+#elseif os(iOS)
+    import UIKit
+#endif
 
 /// A model for a table view cell used inside a section.
 ///
 /// - SeeAlso: `TableViewSection`
 public struct TableViewCellModel: Identifiable {
 
-    public typealias CellConfigurator = (UITableView, UITableViewCell) -> Void
-    public typealias Handler = (UITableView, IndexPath) -> Void
-    public typealias CellHandler = (UITableView, UITableViewCell, IndexPath) -> Void
+    public typealias CellConfigurator = (TableView, TableViewCell) -> Void
+    public typealias Handler = (TableView, IndexPath) -> Void
+    public typealias CellHandler = (TableView, TableViewCell, IndexPath) -> Void
     
     internal static let StandardHeight: CGFloat = 44.0
     
@@ -28,7 +32,7 @@ public struct TableViewCellModel: Identifiable {
     public var data: AnyEquatable?
     
     /// A function that registers this cell for reuse.
-    public var cellReuseRegistrator: ((UITableView) -> Void)?
+    public var cellReuseRegistrator: ((TableView) -> Void)?
 
     /// A function that configures the table view cell with data when it is dequeued.
     public var cellConfigurator: CellConfigurator?
@@ -55,7 +59,7 @@ public struct TableViewCellModel: Identifiable {
     public var didEndDisplayHandler: CellHandler?
     
     /// The edit actions for this cell.
-    public var editActions: [UITableViewRowAction]?
+    public var editActions: [TableViewRowAction]?
 
     /// The optional copy menu action for this cell.
     public var copyAction: CellHandler?
@@ -64,7 +68,7 @@ public struct TableViewCellModel: Identifiable {
     public var pasteAction: CellHandler?
     
     /// The preferred row animation this cell should use when animating in & out of the table view.
-    public var preferredAnimation: UITableViewRowAnimation
+    public var preferredAnimation: TableViewRowAnimation
     
     /// Takes a width, returns a height
     fileprivate let estimatedHeightClosure: (CGFloat) -> CGFloat
@@ -79,7 +83,7 @@ public struct TableViewCellModel: Identifiable {
         return cellReuseIdentifier.hashValue
     }
     
-    /// A plain initializer to be used with a standard `UITableViewCell`.
+    /// A plain initializer to be used with a standard `TableViewCell`.
     ///
     /// - Parameters:
     ///   - identifier: A string that uniquely identifies this cell model within the table view.
@@ -101,7 +105,7 @@ public struct TableViewCellModel: Identifiable {
     public init(
         identifier: String,
         cellReuseIdentifier: String,
-        cellReuseRegistrator: ((UITableView) -> Void)? = nil,
+        cellReuseRegistrator: ((TableView) -> Void)? = nil,
         data: AnyEquatable? = nil,
         estimatedHeight: CGFloat? = nil,
         cellConfigurator: CellConfigurator? = nil,
@@ -111,10 +115,10 @@ public struct TableViewCellModel: Identifiable {
         deselectionHandler: Handler? = nil,
         willDisplayHandler: CellHandler? = nil,
         didEndDisplayHandler: CellHandler? = nil,
-        editActions: [UITableViewRowAction]? = nil,
+        editActions: [TableViewRowAction]? = nil,
         copyAction: CellHandler? = nil,
         pasteAction: CellHandler? = nil,
-        preferredAnimation: UITableViewRowAnimation = .automatic) {
+        preferredAnimation: TableViewRowAnimation = .automatic) {
         
         self.identifier = identifier
         self.cellReuseIdentifier = cellReuseIdentifier
@@ -134,7 +138,7 @@ public struct TableViewCellModel: Identifiable {
         self.preferredAnimation = preferredAnimation
     }
     
-    /// A type-safe initializer to be used with `UITableViewCell` classes of `ReusableViewType`.
+    /// A type-safe initializer to be used with `TableViewCell` classes of `ReusableViewType`.
     ///
     /// - Parameters:
     ///   - cellType: The type of cell this cell model represents.
@@ -152,31 +156,31 @@ public struct TableViewCellModel: Identifiable {
     ///   - copyAction: The optional copy menu action for this cell.
     ///   - pasteAction: The optional paste menu action for this cell.
     ///   - preferredAnimation: The preferred row animation this cell should use when animating in & out of the table view.
-    public init<Cell: UITableViewCell>(
+    public init<Cell: TableViewCell>(
         cellType: Cell.Type,
         identifier: String,
         model: Cell.Model,
-        cellConfigurator: ((UITableView, Cell) -> Void)? = nil,
+        cellConfigurator: ((TableView, Cell) -> Void)? = nil,
         isSelectable: Bool = true,
         isMultiSelectable: Bool = true,
         separatorStyle: SeparatorStyle = .default,
-        selectionHandler: ((UITableView, IndexPath, Cell) -> Void)? = nil,
-        deselectionHandler: ((UITableView, IndexPath, Cell) -> Void)? = nil,
-        willDisplayHandler: ((UITableView, IndexPath, Cell) -> Void)? = nil,
-        didEndDisplayHandler: ((UITableView, IndexPath, Cell) -> Void)? = nil,
-        editActions: [UITableViewRowAction]? = nil,
-        copyAction: ((UITableView, IndexPath, Cell) -> Void)? = nil,
-        pasteAction: ((UITableView, IndexPath, Cell) -> Void)? = nil,
-        preferredAnimation: UITableViewRowAnimation = .automatic) where Cell: ReusableViewType {
+        selectionHandler: ((TableView, IndexPath, Cell) -> Void)? = nil,
+        deselectionHandler: ((TableView, IndexPath, Cell) -> Void)? = nil,
+        willDisplayHandler: ((TableView, IndexPath, Cell) -> Void)? = nil,
+        didEndDisplayHandler: ((TableView, IndexPath, Cell) -> Void)? = nil,
+        editActions: [TableViewRowAction]? = nil,
+        copyAction: ((TableView, IndexPath, Cell) -> Void)? = nil,
+        pasteAction: ((TableView, IndexPath, Cell) -> Void)? = nil,
+        preferredAnimation: TableViewRowAnimation = .automatic) where Cell: ReusableViewType {
         
-        func handlerForTypedHandler(_ typedHandler: @escaping (UITableView, IndexPath, Cell) -> Void) -> Handler {
+        func handlerForTypedHandler(_ typedHandler: @escaping (TableView, IndexPath, Cell) -> Void) -> Handler {
             return { tableView, indexPath in
                 guard let cell = tableView.cellForRow(at: indexPath) as? Cell else { fatalError("Wrong cell type in handler") }
                 typedHandler(tableView, indexPath, cell)
             }
         }
         
-        func cellHandlerForTypedHandler(_ typedHandler: @escaping (UITableView, IndexPath, Cell) -> Void) -> CellHandler {
+        func cellHandlerForTypedHandler(_ typedHandler: @escaping (TableView, IndexPath, Cell) -> Void) -> CellHandler {
             return { tableView, cell, indexPath in
                 guard let cell = cell as? Cell else { return } // Silently fails because of didEndDisplay being VERY unreliable
                 typedHandler(tableView, indexPath, cell)

@@ -10,9 +10,15 @@
 #if os(iOS)
     
 import UIKit
+public typealias CollectionView = UICollectionView
 public typealias TableView = UITableView
+public typealias TableViewCell = UITableViewCell
+public typealias TableViewRowAction = UITableViewRowAction
+public typealias TableViewRowAnimation = UITableViewRowAnimation
+public typealias EdgeInsets = UIEdgeInsets
 public typealias Nib = UINib
 public typealias TableViewHeaderFooterView = UITableViewHeaderFooterView
+public typealias CollectionViewScrollPosition = UICollectionViewScrollPosition
 public typealias TextField = UITextField
 
 

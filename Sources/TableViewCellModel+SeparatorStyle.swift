@@ -5,7 +5,7 @@
 //  Licensed under the MIT license, see LICENSE file.
 //
 
-import UIKit
+import Foundation
 
 public extension TableViewCellModel {
     
@@ -36,7 +36,7 @@ public extension TableViewCellModel {
     
 }
 
-public extension UITableViewCell {
+public extension TableViewCell {
     
     /// Sets a separator style to a cell. Note that setting the `.default` style on an already visible cell which tweaks its separator insets might be flaky.
     ///
@@ -46,9 +46,9 @@ public extension UITableViewCell {
             case .fullWidth:
                 separatorInset = .zero
             case .none:
-                separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
+                separatorInset = EdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
             case .default:
-                separatorInset = UIEdgeInsets(top: 0, left: layoutMargins.left, bottom: 0, right: 0)
+                separatorInset = EdgeInsets(top: 0, left: layoutMargins.left, bottom: 0, right: 0)
         }
     }
     

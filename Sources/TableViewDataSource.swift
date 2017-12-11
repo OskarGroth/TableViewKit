@@ -5,7 +5,11 @@
 //  Licensed under the MIT license, see LICENSE file.
 //
 
-import UIKit
+#if os(OSX)
+    import Cocoa
+#elseif os(iOS)
+    import UIKit
+#endif
 
 ///
 /// A generic, heterogenous table view data source and delegate.
