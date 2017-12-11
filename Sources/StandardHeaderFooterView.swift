@@ -5,10 +5,14 @@
 //  Licensed under the MIT license, see LICENSE file.
 //
 
-import UIKit
+#if os(OSX)
+    import Cocoa
+#elseif os(iOS)
+    import UIKit
+#endif
 
 /// Wraps a standard `UITableViewHeaderFooterView` by adding reusability protocols & a view model.
-open class StandardHeaderFooterView: UITableViewHeaderFooterView, DataSetupable, ReusableViewClass {
+open class StandardHeaderFooterView: TableViewHeaderFooterView, DataSetupable, ReusableViewClass {
     
     /// The model for a `StandardHeaderFooterView`.
     public struct Model: Hashable, AnyEquatable {

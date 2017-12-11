@@ -5,7 +5,11 @@
 //  Licensed under the MIT license, see LICENSE file.
 //
 
-import UIKit
+#if os(OSX)
+    import Cocoa
+#elseif os(iOS)
+    import UIKit
+#endif
 
 /// A type erasing equality protocol. Works like the good ol' Objective-C `isEqual`.
 /// Hashable types just need to add the protocol to their interface without writing any implementation.

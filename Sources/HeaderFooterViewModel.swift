@@ -5,15 +5,19 @@
 //  Licensed under the MIT license, see LICENSE file.
 //
 
-import UIKit
+#if os(OSX)
+    import Cocoa
+#elseif os(iOS)
+    import UIKit
+#endif
 
 /// A view model for a table view header footer view
 public struct TableViewHeaderFooterViewModel: Identifiable {
     
     /// A function to configure a `UITableViewHeaderFooterView`.
-    public typealias Configurator = (UITableViewHeaderFooterView) -> UITableViewHeaderFooterView
+    public typealias Configurator = (TableViewHeaderFooterView) -> TableViewHeaderFooterView
     
-    fileprivate static let StandardHeight: CGFloat = 28.0
+    public static let StandardHeight: CGFloat = 28.0
     
     /// :nodoc:
     public let identifier: String
@@ -22,7 +26,7 @@ public struct TableViewHeaderFooterViewModel: Identifiable {
     public let viewReuseIdentifier: String
     
     /// A function that registers this view for reuse.
-    public var viewReuseRegistrator: ((UITableView) -> Void)?
+    public var viewReuseRegistrator: ((TableView) -> Void)?
     
     /// This view's data
     public let data: AnyEquatable?
@@ -55,7 +59,7 @@ public struct TableViewHeaderFooterViewModel: Identifiable {
     ///   - data: Any optional data the header footer view needs.
     ///   - estimatedHeight: The estimated height of the view. Defaults to standard 28.0pts.
     ///   - configurator: A configuration function for setting up the view when it becomes visible.
-    public init(identifier: String, viewReuseIdentifier: String, viewReuseRegistrator: ((UITableView) -> Void)? = nil, data: AnyEquatable? = nil, estimatedHeight: CGFloat = TableViewHeaderFooterViewModel.StandardHeight, configurator: Configurator? = nil) {
+    public init(identifier: String, viewReuseIdentifier: String, viewReuseRegistrator: ((TableView) -> Void)? = nil, data: AnyEquatable? = nil, estimatedHeight: CGFloat = TableViewHeaderFooterViewModel.StandardHeight, configurator: Configurator? = nil) {
         self.identifier = identifier
         self.viewReuseIdentifier = viewReuseIdentifier
         self.viewReuseRegistrator = viewReuseRegistrator
@@ -73,7 +77,7 @@ public struct TableViewHeaderFooterViewModel: Identifiable {
     ///   - additionalConfiguration: Any other configuration than setting the view's data to be done when the view becomes visible. Defaults to `nil`.
     ///
     /// - SeeAlso: `ReusableViewType`
-    public init<View: UITableViewHeaderFooterView>(viewType: View.Type, identifier: String, model: View.Model, additionalConfiguration: ((View) -> View)? = nil) where View: ReusableViewType {
+    public init<View: TableViewHeaderFooterView>(viewType: View.Type, identifier: String, model: View.Model, additionalConfiguration: ((View) -> View)? = nil) where View: ReusableViewType {
         self.identifier = identifier
         self.data = model
         self.viewReuseIdentifier = View.staticReuseIdentifier

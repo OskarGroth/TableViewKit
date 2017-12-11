@@ -5,7 +5,11 @@
 //  Licensed under the MIT license, see LICENSE file.
 //
 
-import UIKit
+#if os(OSX)
+    import Cocoa
+#elseif os(iOS)
+    import UIKit
+#endif
 
 /// A typealias for a commonly desired combination of view protocols when dealing with reusability.
 public typealias ReusableViewType = DataSetupable & Reusable
@@ -54,7 +58,7 @@ public protocol Reusable {
     
     static var staticReuseIdentifier: String { get }
     
-    static func register(viewKind: ReusableViewKind, inTableView tableView: UITableView)
+    static func register(viewKind: ReusableViewKind, inTableView tableView: TableView)
 
 }
 
@@ -75,7 +79,7 @@ public protocol ReusableViewClass: class, StaticTypeNameReusable { }
 
 extension ReusableViewClass {
     
-    public static func register(viewKind: ReusableViewKind, inTableView tableView: UITableView) {
+    public static func register(viewKind: ReusableViewKind, inTableView tableView: TableView) {
         switch viewKind {
             case .cell:
                 tableView.register(Self.self, forCellReuseIdentifier: staticReuseIdentifier)
@@ -105,11 +109,11 @@ extension ReusableViewNib {
     }
     
     /// :nodoc:
-    public static var nib: UINib {
-        return UINib(nibName: nibName, bundle: Bundle(for: self))
+    public static var nib: Nib {
+        return Nib(nibName: nibName, bundle: Bundle(for: self))
     }
     
-    public static func register(viewKind: ReusableViewKind, inTableView tableView: UITableView) {
+    public static func register(viewKind: ReusableViewKind, inTableView tableView: TableView) {
         switch viewKind {
             case .cell:
                 tableView.register(nib, forCellReuseIdentifier: staticReuseIdentifier)
