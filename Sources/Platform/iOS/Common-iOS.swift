@@ -14,6 +14,7 @@ import UIKit
 public typealias CollectionView = UICollectionView
 public typealias TableView = UITableView
 public typealias TableViewCell = UITableViewCell
+public typealias TableViewCellStyle = UITableViewCellStyle
 public typealias TableViewRowAction = UITableViewRowAction
 public typealias TableViewRowAnimation = UITableViewRowAnimation
 public typealias EdgeInsets = UIEdgeInsets

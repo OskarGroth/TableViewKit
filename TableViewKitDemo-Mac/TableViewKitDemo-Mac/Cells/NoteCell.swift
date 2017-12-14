@@ -1,18 +1,23 @@
 //
 //  HandwrittenNoteCell.swift
-//  TableViewKitDemo
+//  TableViewKitDemo-Mac
 //
-//  Created by Alek Åström on 2017-12-10.
-//  Copyright © 2017 Alek Åström. All rights reserved.
+//  Created by Oskar Groth on 2017-12-12.
+//  Copyright © 2017 Oskar Groth. All rights reserved.
 //
 
-import UIKit
-import TableViewKit
+import Cocoa
+import TableViewKitMac
 
-class HandwrittenNoteCell: UITableViewCell, ReusableViewNib, DataSetupable {
-   
-    @IBOutlet var topLabel: UILabel!
-    @IBOutlet var bottomLabel: UILabel!
+class AsdCell: NSTableCellView {
+    @IBOutlet var topLabel: TextField!
+
+}
+
+class NoteCell: TableViewCell, ReusableViewNib, DataSetupable {
+
+    @IBOutlet var topLabel: TextField!
+    @IBOutlet var bottomLabel: TextField!
     
     struct Model: Hashable, AnyEquatable {
         var title: String
@@ -23,7 +28,7 @@ class HandwrittenNoteCell: UITableViewCell, ReusableViewNib, DataSetupable {
         }
     }
     
-    func setup(_ model: HandwrittenNoteCell.Model) {
+    func setup(_ model: NoteCell.Model) {
         topLabel.text = model.title
         bottomLabel.text = model.subtitle
         bottomLabel.isHidden = (model.subtitle == nil)
@@ -34,7 +39,7 @@ class HandwrittenNoteCell: UITableViewCell, ReusableViewNib, DataSetupable {
     }
 }
 
-func ==(lhs: HandwrittenNoteCell.Model, rhs: HandwrittenNoteCell.Model) -> Bool {
+func ==(lhs: NoteCell.Model, rhs: NoteCell.Model) -> Bool {
     return lhs.title == rhs.title
         && lhs.subtitle == rhs.subtitle
 }

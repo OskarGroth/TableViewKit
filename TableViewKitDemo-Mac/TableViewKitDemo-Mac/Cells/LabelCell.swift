@@ -1,15 +1,15 @@
 //
 //  LabelCell.swift
-//  TableViewKitDemo
+//  TableViewKitDemo-Mac
 //
-//  Created by Alek Åström on 2017-12-10.
-//  Copyright © 2017 Alek Åström. All rights reserved.
+//  Created by Oskar Groth on 2017-12-12.
+//  Copyright © 2017 Oskar Groth. All rights reserved.
 //
 
-import UIKit
-import TableViewKit
+import Cocoa
+import TableViewKitMac
 
-class LabelCell: UITableViewCell, ReusableViewClass, DataSetupable {
+class LabelCell: TableViewCell, ReusableViewClass, DataSetupable {
     
     struct Model: Hashable, AnyEquatable {
         let text: String
@@ -19,7 +19,7 @@ class LabelCell: UITableViewCell, ReusableViewClass, DataSetupable {
         }
     }
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: TableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
     }
     
@@ -28,7 +28,7 @@ class LabelCell: UITableViewCell, ReusableViewClass, DataSetupable {
     }
     
     func setup(_ model: Model) {
-        textLabel?.text = model.text
+        textField?.text = model.text
     }
     
 }

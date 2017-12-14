@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "759B8BA61FDF17F2003D7E14"
-               BuildableName = "TableViewKit_Mac.framework"
-               BlueprintName = "TableViewKit Mac"
+               BuildableName = "TableViewKitMac.framework"
+               BlueprintName = "TableViewKitMac"
                ReferencedContainer = "container:TableViewKit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -48,8 +48,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "759B8BA61FDF17F2003D7E14"
-            BuildableName = "TableViewKit_Mac.framework"
-            BlueprintName = "TableViewKit Mac"
+            BuildableName = "TableViewKitMac.framework"
+            BlueprintName = "TableViewKitMac"
             ReferencedContainer = "container:TableViewKit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -66,8 +66,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "759B8BA61FDF17F2003D7E14"
-            BuildableName = "TableViewKit_Mac.framework"
-            BlueprintName = "TableViewKit Mac"
+            BuildableName = "TableViewKitMac.framework"
+            BlueprintName = "TableViewKitMac"
             ReferencedContainer = "container:TableViewKit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

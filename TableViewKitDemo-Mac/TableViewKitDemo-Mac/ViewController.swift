@@ -20,9 +20,10 @@ struct Quote {
     var author: Person
 }
 
-class DemoTableViewController: NSTableViewController {
+class DemoTableViewController: NSViewController, TableViewDataSource, TableViewDelegate {
     
-    lazy var dataSource: TableViewDataSource = TableViewDataSource()
+    lazy var dataSource: TableViewKitDataSource = TableViewKitDataSource()
+    var tableView: TableView!
     
     var quotes: [Quote] = [
         Quote(text: "I'll be back", author: Person(name: "Arnold Swarzenegger")),
@@ -41,6 +42,15 @@ class DemoTableViewController: NSTableViewController {
     
     func updateSections(animated: Bool) {
         dataSource.updateSections(to: tableViewSections(), animation: animated ? .automatic : .none)
+    }
+    
+    
+    func numberOfRows(in tableView: NSTableView) -> Int {
+        return 2
+    }
+    
+    func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
+        return "derp"
     }
     
     func tableViewSections() -> [TableViewSection] {
@@ -66,7 +76,7 @@ class DemoTableViewController: NSTableViewController {
     
     func cellModel(forQuote quote: Quote) -> TableViewCellModel {
         return TableViewCellModel(
-            cellType: HandwrittenNoteCell.self,
+            cellType: NoteCell.self,
             identifier: quote.id,
             model: .init(quote: quote),
             selectionHandler: { [weak self] _, _, _ in
@@ -76,7 +86,7 @@ class DemoTableViewController: NSTableViewController {
                 self?.updateSections(animated: true)
             },
             copyAction: { _, _, _ in
-                UIPasteboard.general.string = quote.shareableString
+                //UIPasteboard.general.string = quote.shareableString
         }
         )
     }
@@ -90,12 +100,12 @@ extension Quote {
     }
     
 }
-/*
-extension HandwrittenNoteCell.Model {
+
+extension NoteCell.Model {
     
     init(quote: Quote) {
         self.title = quote.text
         self.subtitle = "– " + quote.author.name
     }
     
-}*/
+}

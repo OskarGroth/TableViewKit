@@ -12,6 +12,7 @@
     public typealias CollectionView = NSCollectionView
     public typealias TableView = MacTableView
     public typealias TableViewCell = MacTableViewCell
+    public typealias TableViewCellStyle = MacTableViewCellStyle
     public typealias TableViewRowAction = NSTableViewRowAction
     public typealias TableViewRowAnimation = NSTableView.AnimationOptions
     public typealias EdgeInsets = MacEdgeInsets
@@ -42,7 +43,16 @@
         
     }
     
-    public class MacTableViewCell: NSTableCellView {
+    open class MacTableViewCell: NSTableCellView {
+        
+        public init(style: TableViewCellStyle, reuseIdentifier: String?) {
+            super.init(frame: .zero)
+        }
+        
+        required public init?(coder decoder: NSCoder) {
+            super.init(coder: decoder)
+        }
+        
         public var separatorInset: EdgeInsets = .zero
         public var layoutMargins: EdgeInsets = .zero
     }
@@ -53,6 +63,13 @@
         public var bottom: CGFloat
         public var right: CGFloat
         public static var zero: MacEdgeInsets { return MacEdgeInsets(top: 0, left: 0, bottom: 0, right: 0) }
+    }
+    
+    public enum MacTableViewCellStyle: Int {
+        case `default`
+        case value1
+        case value2
+        case subtitle
     }
     
     open class MacHeaderFooterView: NSTableCellView {
@@ -172,6 +189,10 @@
             return nil
         }
         
+        public var indexPathsForSelectedRows: [IndexPath]? {
+            return nil
+        }
+        
         public var visibleCells: [TableViewCell] {
             return []
         }
@@ -227,7 +248,7 @@
         
         public func dequeueReusableCell(withIdentifier identifier: String, for indexPath: IndexPath) -> TableViewCell {
             // TODO
-            return TableViewCell()
+            return TableViewCell(style: .default, reuseIdentifier: identifier)
         }
         
         public func dequeueReusableHeaderFooterView(withIdentifier identifier: String) -> TableViewHeaderFooterView? {
